@@ -27,10 +27,37 @@ const getDashboardStats = async () => {
     );
 
     const [[complaint]] = await db.execute(
-        "SELECT COUNT(*) AS openComplaints FROM complaints WHERE status='OPEN'"
+    "SELECT COUNT(*) AS openComplaints FROM complaints WHERE status='OPEN'"
     );
 
+    const [recentPayments] = await db.execute(`
+    SELECT
+        rp.id,
+        u.name AS tenantName,
+        rp.amount,
+        rp.payment_date
+    FROM rent_payments rp
+    JOIN users u ON rp.tenant_id = u.id
+    ORDER BY rp.payment_date DESC
+    LIMIT 5
+    `);
+
+    const [recentComplaints] = await db.execute(`
+    SELECT
+        c.id,
+        u.name AS tenantName,
+        c.title,
+        c.status,
+        c.priority,
+        c.created_at
+    FROM complaints c
+    JOIN users u ON c.tenant_id = u.id
+    ORDER BY c.created_at DESC
+    LIMIT 5
+    `);
+
     return {
+    summary: {
         ...property,
         ...room,
         ...vacant,
@@ -38,7 +65,10 @@ const getDashboardStats = async () => {
         ...tenant,
         ...payment,
         ...complaint,
-    };
+    },
+    recentPayments,
+    recentComplaints,
+};
 };
 
 module.exports = {

@@ -31,9 +31,15 @@ const registerUser = async (userData) => {
     const token = generateToken(user);
 
     return {
-        user,
-        token,
-    };
+    user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        phone: user.phone,
+    },
+    token,
+};
 };
 
 const loginUser = async (email, password) => {
