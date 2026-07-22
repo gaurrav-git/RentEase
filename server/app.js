@@ -10,6 +10,10 @@ const authRoutes = require("./routes/authRoutes");
 const testRoutes = require("./routes/testRoutes");
 const propertyRoutes = require("./routes/propertyRoutes");
 const roomRoutes = require("./routes/roomRoutes");
+const tenantRoutes = require("./routes/tenantRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
+const complaintRoutes = require("./routes/complaintRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes");
 
 const app = express();
 
@@ -22,6 +26,10 @@ app.use("/api/auth", authRoutes);
 app.use("/api/test", testRoutes);
 app.use("/api/properties", propertyRoutes);
 app.use("/api/rooms", roomRoutes);
+app.use("/api/tenants", tenantRoutes);
+app.use("/api/rent-payments", paymentRoutes);
+app.use("/api/complaints", complaintRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 // Test Route
 app.get("/", (req, res) => {

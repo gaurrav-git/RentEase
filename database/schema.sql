@@ -78,3 +78,11 @@ CREATE TABLE notifications (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+-- Add a room_id column to the users table
+
+ALTER TABLE users
+ADD room_id INT NULL,
+ADD CONSTRAINT fk_user_room
+FOREIGN KEY (room_id) REFERENCES rooms(id)
+ON DELETE SET NULL;
