@@ -8,6 +8,7 @@ require("./config/db");
 
 const authRoutes = require("./routes/authRoutes");
 const testRoutes = require("./routes/testRoutes");
+const propertyRoutes = require("./routes/propertyRoutes");
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(express.json());
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/test", testRoutes);
+app.use("/api/properties", propertyRoutes);
 
 // Test Route
 app.get("/", (req, res) => {
