@@ -30,14 +30,23 @@ const createRoom = async (req, res) => {
 };
 
 const getRooms = async (req, res) => {
+    try {
 
-    const rooms = await roomModel.getRoomsByProperty(req.params.propertyId);
+        const rooms = await roomModel.getRoomsByOwner(req.user.id);
 
-    res.json({
-        success: true,
-        data: rooms,
-    });
+        res.json({
+            success: true,
+            data: rooms,
+        });
 
+    } catch (err) {
+
+        res.status(500).json({
+            success: false,
+            message: err.message,
+        });
+
+    }
 };
 
 const updateRoom = async (req, res) => {

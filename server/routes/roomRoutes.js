@@ -15,7 +15,7 @@ router.post(
 );
 
 router.get(
-    "/:propertyId",
+    "/",
     authenticate,
     authorize("OWNER"),
     roomController.getRooms

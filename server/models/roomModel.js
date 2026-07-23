@@ -34,22 +34,40 @@ const getRoomById = async (id) => {
     return rows[0];
 };
 
+const getRoomsByOwner = async (ownerId) => {
+    const [rows] = await db.execute(
+        `
+        SELECT
+            r.*,
+            p.name AS property_name
+        FROM rooms r
+        INNER JOIN properties p
+            ON r.property_id = p.id
+        WHERE p.owner_id = ?
+        ORDER BY p.name, r.room_number
+        `,
+        [ownerId]
+    );
+
+    return rows;
+};
+
 const updateRoom = async (id, roomData) => {
     const [result] = await db.execute(
         `UPDATE rooms
-         SET room_number=?, capacity=?, rent=?, status=?
-         WHERE id=?`,
+         SET room_number = ?, capacity = ?, rent = ?
+         WHERE id = ?`,
         [
             roomData.room_number,
             roomData.capacity,
             roomData.rent,
-            roomData.status,
             id,
         ]
     );
 
     return result;
 };
+
 
 const deleteRoom = async (id) => {
     const [result] = await db.execute(
@@ -63,6 +81,7 @@ const deleteRoom = async (id) => {
 module.exports = {
     createRoom,
     getRoomsByProperty,
+    getRoomsByOwner,
     getRoomById,
     updateRoom,
     deleteRoom,
