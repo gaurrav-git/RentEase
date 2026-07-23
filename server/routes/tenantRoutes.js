@@ -7,6 +7,13 @@ const authorize = require("../middleware/roleMiddleware");
 
 const tenantController = require("../controllers/tenantController");
 
+router.post(
+    "/",
+    authenticate,
+    authorize("OWNER"),
+    tenantController.createTenant
+);
+
 router.get(
     "/",
     authenticate,
@@ -15,10 +22,17 @@ router.get(
 );
 
 router.put(
-    "/assign-room",
+    "/:id",
     authenticate,
     authorize("OWNER"),
-    tenantController.assignRoom
+    tenantController.updateTenant
+);
+
+router.delete(
+    "/:id",
+    authenticate,
+    authorize("OWNER"),
+    tenantController.deleteTenant
 );
 
 module.exports = router;

@@ -122,7 +122,7 @@ const handleEdit = (room) => {
         property_id: room.property_id,
         room_number: room.room_number,
         capacity: room.capacity,
-        rent: NUMBER(room.rent),
+        rent: Number(room.rent),
     });
 
     setShowModal(true);

@@ -11,15 +11,21 @@ const getDashboardStats = async () => {
     );
 
     const [[vacant]] = await db.execute(
-        "SELECT COUNT(*) AS vacantRooms FROM rooms WHERE status='VACANT'"
+    `SELECT COUNT(*) AS vacantRooms
+     FROM rooms
+     WHERE occupied < capacity`
     );
 
     const [[occupied]] = await db.execute(
-        "SELECT COUNT(*) AS occupiedRooms FROM rooms WHERE status='OCCUPIED'"
+    `SELECT COUNT(*) AS occupiedRooms
+     FROM rooms
+     WHERE occupied = capacity`
     );
 
     const [[tenant]] = await db.execute(
-        "SELECT COUNT(*) AS totalTenants FROM users WHERE role='TENANT'"
+    `SELECT COUNT(*) AS totalTenants
+     FROM tenants
+     WHERE status = 'ACTIVE'`
     );
 
     const [[payment]] = await db.execute(

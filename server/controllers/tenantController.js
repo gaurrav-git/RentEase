@@ -1,38 +1,141 @@
+const bcrypt = require("bcrypt");
+const db = require("../config/db");
 const tenantModel = require("../models/tenantModel");
 
-const getTenants = async (req, res) => {
-    const tenants = await tenantModel.getAllTenants();
+const createTenant = async (req, res) => {
+    try {
+        const {
+            name,
+            email,
+            password,
+            room_id,
+            phone,
+            aadhaar,
+            occupation,
+            joining_date,
+            security_deposit,
+        } = req.body;
 
-    res.json({
-        success: true,
-        data: tenants,
-    });
-};
+        // Check if email already exists
+        const [existing] = await db.execute(
+            "SELECT id FROM users WHERE email = ?",
+            [email]
+        );
 
-const assignRoom = async (req, res) => {
+        if (existing.length > 0) {
+            return res.status(400).json({
+                success: false,
+                message: "Email already exists",
+            });
+        }
 
-    const { tenantId, roomId } = req.body;
+        // Hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-    const result = await tenantModel.assignRoom(
-        tenantId,
-        roomId
-    );
+        // Create user
+        const [userResult] = await db.execute(
+            `INSERT INTO users (name, email, password, role)
+             VALUES (?, ?, ?, 'TENANT')`,
+            [name, email, hashedPassword]
+        );
 
-    if (result.affectedRows === 0) {
-        return res.status(404).json({
+        const userId = userResult.insertId;
+
+        // Create tenant profile
+        await tenantModel.createTenant(userId, {
+            room_id,
+            phone,
+            aadhaar,
+            occupation,
+            joining_date,
+            security_deposit,
+        });
+
+        // Increase occupied count
+        await db.execute(
+            `UPDATE rooms
+             SET occupied = occupied + 1
+             WHERE id = ?`,
+            [room_id]
+        );
+
+        res.status(201).json({
+            success: true,
+            message: "Tenant created successfully",
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
             success: false,
-            message: "Tenant not found",
+            message: "Server Error",
         });
     }
+};
 
-    res.json({
-        success: true,
-        message: "Room assigned successfully",
-    });
+const getTenants = async (req, res) => {
+    try {
+        const tenants = await tenantModel.getAllTenants();
 
+        res.json({
+            success: true,
+            data: tenants,
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: "Server Error",
+        });
+    }
+};
+
+const updateTenant = async (req, res) => {
+    try {
+        console.log("Update Request:", req.body);
+
+        await tenantModel.updateTenant(req.params.id, req.body);
+
+        res.json({
+            success: true,
+            message: "Tenant updated successfully",
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
+const deleteTenant = async (req, res) => {
+    try {
+        await tenantModel.deleteTenant(req.params.id);
+
+        res.json({
+            success: true,
+            message: "Tenant deleted successfully",
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
 };
 
 module.exports = {
+    createTenant,
     getTenants,
-    assignRoom,
+    updateTenant,
+    deleteTenant,
 };
