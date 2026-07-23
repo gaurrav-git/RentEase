@@ -26,7 +26,46 @@ const getPayments = async () => {
     return rows;
 };
 
+const getPaymentsByTenant = async (userId) => {
+    const [rows] = await db.execute(
+        `SELECT
+            rp.id,
+            rp.amount,
+            rp.payment_date,
+            rp.status,
+            r.room_number,
+            p.name AS property_name
+        FROM rent_payments rp
+        JOIN tenants t ON rp.tenant_id = t.id
+        JOIN rooms r ON rp.room_id = r.id
+        JOIN properties p ON r.property_id = p.id
+        WHERE t.user_id = ?
+        ORDER BY rp.payment_date DESC`,
+        [userId]
+    );
+
+    return rows;
+};
+
+const getTenantPaymentStats = async (userId) => {
+    const [rows] = await db.execute(
+        `SELECT
+            COALESCE(SUM(CASE WHEN rp.status='PAID' THEN rp.amount END),0) AS totalPaid,
+            COUNT(CASE WHEN rp.status='PENDING' THEN 1 END) AS pendingPayments,
+            COALESCE(MAX(r.rent),0) AS monthlyRent
+        FROM tenants t
+        JOIN rooms r ON t.room_id = r.id
+        LEFT JOIN rent_payments rp ON rp.tenant_id = t.id
+        WHERE t.user_id = ?`,
+        [userId]
+    );
+
+    return rows[0];
+};
+
 module.exports = {
     createPayment,
     getPayments,
+    getPaymentsByTenant,
+    getTenantPaymentStats,
 };

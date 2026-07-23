@@ -23,7 +23,22 @@ const getPayments = async (req, res) => {
 
 };
 
+const getMyPayments = async (req, res) => {
+
+    const payments = await paymentModel.getPaymentsByTenant(req.user.id);
+
+    const stats = await paymentModel.getTenantPaymentStats(req.user.id);
+
+    res.json({
+        success: true,
+        payments,
+        stats,
+    });
+
+};
+
 module.exports = {
     createPayment,
     getPayments,
+    getMyPayments,
 };

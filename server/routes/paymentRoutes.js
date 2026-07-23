@@ -21,4 +21,11 @@ router.get(
     paymentController.getPayments
 );
 
+router.get(
+    "/my-payments",
+    authenticate,
+    authorize("TENANT"),
+    paymentController.getMyPayments
+);
+
 module.exports = router;
