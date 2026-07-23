@@ -93,6 +93,35 @@ const getTenants = async (req, res) => {
     }
 };
 
+const getTenantDashboard = async (req, res) => {
+    try {
+
+        const dashboard = await tenantModel.getTenantDashboard(req.user.id);
+
+        if (!dashboard) {
+            return res.status(404).json({
+                success: false,
+                message: "Tenant not found",
+            });
+        }
+
+        res.json({
+            success: true,
+            data: dashboard,
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: "Server Error",
+        });
+
+    }
+};
+
 const updateTenant = async (req, res) => {
     try {
         console.log("Update Request:", req.body);
@@ -138,4 +167,5 @@ module.exports = {
     getTenants,
     updateTenant,
     deleteTenant,
+    getTenantDashboard,
 };

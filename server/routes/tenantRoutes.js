@@ -7,6 +7,13 @@ const authorize = require("../middleware/roleMiddleware");
 
 const tenantController = require("../controllers/tenantController");
 
+router.get(
+    "/dashboard",
+    authenticate,
+    authorize("TENANT"),
+    tenantController.getTenantDashboard
+);
+
 router.post(
     "/",
     authenticate,

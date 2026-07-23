@@ -4,6 +4,10 @@ export const getTenants = () => {
     return api.get("/tenants");
 };
 
+export const getTenantDashboard = () => {
+    return api.get("/tenants/dashboard");
+};
+
 export const createTenant = (tenantData) => {
     return api.post("/tenants", tenantData);
 };

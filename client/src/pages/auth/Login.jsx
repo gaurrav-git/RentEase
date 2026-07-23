@@ -32,7 +32,11 @@ loginUser(
   response.data.token
 );
 
-navigate("/owner/dashboard");
+if (response.data.user.role === "OWNER") {
+  navigate("/owner/dashboard");
+} else {
+  navigate("/tenant/dashboard");
+}
     } catch (error) {
       console.error(error);
       alert("Invalid email or password");

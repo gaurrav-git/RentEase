@@ -143,6 +143,33 @@ await connection.execute(
     }
 };
 
+const getTenantDashboard = async (userId) => {
+    const [rows] = await db.execute(
+        `
+        SELECT
+            u.name,
+            u.email,
+            t.phone,
+            t.joining_date,
+            t.security_deposit,
+            r.room_number,
+            r.rent,
+            p.name AS property_name
+        FROM tenants t
+        JOIN users u
+            ON t.user_id = u.id
+        JOIN rooms r
+            ON t.room_id = r.id
+        JOIN properties p
+            ON r.property_id = p.id
+        WHERE t.user_id = ?
+        `,
+        [userId]
+    );
+
+    return rows[0];
+};
+
 const deleteTenant = async (id) => {
     const connection = await db.getConnection();
 
@@ -216,4 +243,5 @@ module.exports = {
     getAllTenants,
     updateTenant,
     deleteTenant,
+    getTenantDashboard,
 };

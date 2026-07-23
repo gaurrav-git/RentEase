@@ -30,6 +30,12 @@ const pageTitles = {
   "/owner/payments": "Payments",
   "/owner/complaints": "Complaints",
   "/owner/reports": "Reports",
+
+  "/tenant/dashboard": "Dashboard",
+  "/tenant/profile": "Profile",
+  "/tenant/payments": "Payments",
+  "/tenant/complaints": "Complaints",
+
 };
 
 const currentPage =
@@ -89,8 +95,8 @@ const currentPage =
               {user?.name || "Owner"}
             </h4>
 
-            < p className ="text-sm text-slate-500 dark:text-slate-400">
-              Owner
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+                {user?.role === "OWNER" ? "Owner" : "Tenant"}
             </p>
           </div>
         </div>

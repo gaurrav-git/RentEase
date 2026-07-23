@@ -7,6 +7,11 @@ import Properties from "./pages/owner/Properties";
 import Rooms from "./pages/owner/Rooms";
 import Tenants from "./pages/owner/Tenants";
 
+import TenantDashboard from "./pages/tenant/Dashboard";
+import Profile from "./pages/tenant/Profile";
+import Payments from "./pages/tenant/Payments";
+import Complaints from "./pages/tenant/Complaints";
+
 function App() {
   return (
     <BrowserRouter>
@@ -48,6 +53,11 @@ function App() {
       </ProtectedRoute>
     }
   />
+
+<Route path="/tenant/dashboard" element={<TenantDashboard />} />
+<Route path="/tenant/profile" element={<Profile />} />
+<Route path="/tenant/payments" element={<Payments />} />
+<Route path="/tenant/complaints" element={<Complaints />} />
 </Routes>
     </BrowserRouter>
   );
