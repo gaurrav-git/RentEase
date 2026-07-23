@@ -16,6 +16,28 @@ const createTenant = async (req, res) => {
             security_deposit,
         } = req.body;
 
+        // Check room capacity
+const [room] = await db.execute(
+    `SELECT capacity, occupied
+     FROM rooms
+     WHERE id = ?`,
+    [room_id]
+);
+
+if (room.length === 0) {
+    return res.status(404).json({
+        success: false,
+        message: "Room not found",
+    });
+}
+
+if (room[0].occupied >= room[0].capacity) {
+    return res.status(400).json({
+        success: false,
+        message: "Room is already full",
+    });
+}
+
         // Check if email already exists
         const [existing] = await db.execute(
             "SELECT id FROM users WHERE email = ?",

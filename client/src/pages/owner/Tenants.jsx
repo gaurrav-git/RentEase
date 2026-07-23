@@ -478,23 +478,34 @@ const handleDelete = async (id) => {
     />
 
     <select
-        value={formData.room_id}
-        onChange={(e) =>
-            setFormData({
-                ...formData,
-                room_id: e.target.value,
-            })
-        }
-        className="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
-    >
-        <option value="">Select Room</option>
+    value={formData.room_id}
+    onChange={(e) =>
+        setFormData({
+            ...formData,
+            room_id: e.target.value,
+        })
+    }
+    className="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+>
+    <option value="">Select Room</option>
 
-        {rooms.map((room) => (
-            <option key={room.id} value={room.id}>
-                {room.property_name} - {room.room_number}
+    {rooms.map((room) => {
+        const isFull = room.occupied >= room.capacity;
+
+        return (
+            <option
+                key={room.id}
+                value={room.id}
+                disabled={isFull}
+            >
+                {room.property_name} - {room.room_number}{" "}
+                {isFull
+                    ? `(FULL ${room.occupied}/${room.capacity})`
+                    : `(${room.occupied}/${room.capacity})`}
             </option>
-        ))}
-    </select>
+        );
+    })}
+</select>
 
     {!isEditing && (
         <input
@@ -531,7 +542,7 @@ const handleDelete = async (id) => {
 
     <button
         onClick={() => setShowModal(false)}
-        className="px-5 py-2.5 rounded-lg bg-slate-200 dark:bg-slate-700"
+        className="px-5 py-2.5 rounded-lg bg-slate-200 dark:bg-slate-700 text-white"
     >
         Cancel
     </button>
