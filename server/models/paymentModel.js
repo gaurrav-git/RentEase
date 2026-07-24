@@ -17,25 +17,27 @@ const createPayment = async (paymentData) => {
     return result.insertId;
 };
 
-const getPayments = async () => {
+const getPayments = async (ownerId) => {
     const [rows] = await db.execute(
-        `SELECT
-            rp.id,
-            rp.tenant_id,
-            rp.room_id,
-            u.name AS tenant_name,
-            p.name AS property_name,
-            r.room_number,
-            rp.amount,
-            rp.payment_date,
-            rp.status
-        FROM rent_payments rp
-        JOIN tenants t ON rp.tenant_id = t.user_id
-        JOIN users u ON t.user_id = u.id
-        JOIN rooms r ON rp.room_id = r.id
-        JOIN properties p ON r.property_id = p.id
-        ORDER BY rp.payment_date DESC`
-    );
+    `SELECT
+        rp.id,
+        rp.tenant_id,
+        rp.room_id,
+        u.name AS tenant_name,
+        p.name AS property_name,
+        r.room_number,
+        rp.amount,
+        rp.payment_date,
+        rp.status
+    FROM rent_payments rp
+    JOIN tenants t ON rp.tenant_id = t.user_id
+    JOIN users u ON t.user_id = u.id
+    JOIN rooms r ON rp.room_id = r.id
+    JOIN properties p ON r.property_id = p.id
+    WHERE p.owner_id = ?
+    ORDER BY rp.payment_date DESC`,
+    [ownerId]
+);
 
     return rows;
 };

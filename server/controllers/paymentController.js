@@ -1,8 +1,28 @@
+const db = require("../config/db");
 const paymentModel = require("../models/paymentModel");
 
 const createPayment = async (req, res) => {
     try {
         console.log("Payment Body:", req.body);
+
+        const [room] = await db.execute(
+    `
+    SELECT r.id
+    FROM rooms r
+    JOIN properties p
+        ON r.property_id = p.id
+    WHERE r.id = ?
+    AND p.owner_id = ?
+    `,
+    [req.body.room_id, req.user.id]
+);
+
+if (room.length === 0) {
+    return res.status(403).json({
+        success: false,
+        message: "Unauthorized room",
+    });
+}
 
         const paymentId = await paymentModel.createPayment(req.body);
 
@@ -22,14 +42,24 @@ const createPayment = async (req, res) => {
 };
 
 const getPayments = async (req, res) => {
+    try {
+        const ownerId = req.user.id;
 
-    const payments = await paymentModel.getPayments();
+        const payments = await paymentModel.getPayments(ownerId);
 
-    res.json({
-        success: true,
-        data: payments,
-    });
+        res.json({
+            success: true,
+            data: payments,
+        });
 
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: "Server Error",
+        });
+    }
 };
 
 const getMyPayments = async (req, res) => {

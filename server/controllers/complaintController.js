@@ -37,38 +37,52 @@ const createComplaint = async (req, res) => {
 };
 
 const getComplaints = async (req, res) => {
+    try {
+        const ownerId = req.user.id;
 
-    const complaints = await complaintModel.getComplaints();
-    const stats = await complaintModel.getComplaintStats();
-    res.json({
-        success: true,
-        data: complaints,
-        stats,
-    });
+        const complaints = await complaintModel.getComplaints(ownerId);
+        const stats = await complaintModel.getComplaintStats(ownerId);
 
+        res.json({
+            success: true,
+            data: complaints,
+            stats,
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: "Server Error",
+        });
+    }
 };
 
 const updateComplaintStatus = async (req, res) => {
-    const { id } = req.params;
-    const { status } = req.body;
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
 
-    const result = await complaintModel.updateComplaintStatus(
-        id,
-        status
-    );
+        await complaintModel.updateComplaintStatus(
+            id,
+            status,
+            req.user.id
+        );
 
-    if (result.affectedRows === 0) {
-        return res.status(404).json({
+        res.json({
+            success: true,
+            message: "Complaint updated successfully",
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
             success: false,
-            message: "Complaint not found",
+            message: error.message,
         });
     }
-
-    res.json({
-        success: true,
-        message: "Complaint updated successfully",
-    });
-
 };
 
 const getMyComplaints = async (req, res) => {

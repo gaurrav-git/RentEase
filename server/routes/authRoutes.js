@@ -26,7 +26,7 @@ router.post(
     "/register",
     registerValidation,
     validate,
-    authController.register
+    authController.registerOwner
 );
 
 router.post(

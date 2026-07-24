@@ -8,6 +8,7 @@ import Rooms from "./pages/owner/Rooms";
 import Tenants from "./pages/owner/Tenants";
 import OwnerPayments from "./pages/owner/payments";
 import OwnerComplaints from "./pages/owner/Complaints";
+import Register from "./pages/auth/Register";
 
 import TenantDashboard from "./pages/tenant/Dashboard";
 import Profile from "./pages/tenant/Profile";
@@ -16,9 +17,13 @@ import Complaints from "./pages/tenant/Complaints";
 
 function App() {
   return (
+
+
     <BrowserRouter>
       <Routes>
   <Route path="/" element={<Login />} />
+
+  <Route path="/register" element={<Register />} />
 
   <Route
     path="/owner/dashboard"

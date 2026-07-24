@@ -13,10 +13,6 @@ const registerValidation = [
         .isLength({ min: 6 })
         .withMessage("Password must be at least 6 characters"),
 
-    body("role")
-        .isIn(["OWNER", "TENANT"])
-        .withMessage("Role must be OWNER or TENANT"),
-
     body("phone")
         .optional()
         .isLength({ min: 10, max: 15 })

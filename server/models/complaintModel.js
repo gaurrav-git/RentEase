@@ -16,49 +16,88 @@ const createComplaint = async (complaintData) => {
     return result.insertId;
 };
 
-const getComplaints = async () => {
-    const [rows] = await db.execute(`
-        SELECT
-            c.id,
-            c.title,
-            c.description,
-            c.priority,
-            c.status,
-            c.created_at,
-            u.name AS tenant_name,
-            r.room_number,
-            p.name AS property_name
+const getComplaints = async (ownerId) => {
+    const [rows] = await db.execute(
+    `
+    SELECT
+        c.id,
+        c.title,
+        c.description,
+        c.priority,
+        c.status,
+        c.created_at,
+        u.name AS tenant_name,
+        r.room_number,
+        p.name AS property_name
+    FROM complaints c
+    JOIN tenants t
+        ON c.tenant_id = t.user_id
+    JOIN users u
+        ON t.user_id = u.id
+    JOIN rooms r
+        ON c.room_id = r.id
+    JOIN properties p
+        ON r.property_id = p.id
+    WHERE p.owner_id = ?
+    ORDER BY c.created_at DESC
+    `,
+    [ownerId]
+);
+
+return rows;
+};
+
+const getComplaintStats = async (ownerId) => {
+    const [rows] = await db.execute(
+    `
+    SELECT
+        COUNT(CASE WHEN c.status='OPEN' THEN 1 END) AS open,
+        COUNT(CASE WHEN c.status='IN_PROGRESS' THEN 1 END) AS inProgress,
+        COUNT(CASE WHEN c.status='RESOLVED' THEN 1 END) AS resolved,
+        COUNT(*) AS total
+    FROM complaints c
+    JOIN tenants t
+        ON c.tenant_id = t.user_id
+    JOIN rooms r
+        ON c.room_id = r.id
+    JOIN properties p
+        ON r.property_id = p.id
+    WHERE p.owner_id = ?
+    `,
+    [ownerId]
+);
+
+return rows[0];
+};
+
+const updateComplaintStatus = async (id, status, ownerId) => {
+    // Verify complaint belongs to this owner
+    const [complaint] = await db.execute(
+        `
+        SELECT c.id
         FROM complaints c
         JOIN tenants t
             ON c.tenant_id = t.user_id
-        JOIN users u
-            ON t.user_id = u.id
         JOIN rooms r
             ON c.room_id = r.id
         JOIN properties p
             ON r.property_id = p.id
-        ORDER BY c.created_at DESC
-    `);
-
-    return rows;
-};
-
-const getComplaintStats = async () => {
-    const [rows] = await db.execute(
-        `SELECT
-            COUNT(CASE WHEN status='OPEN' THEN 1 END) AS open,
-            COUNT(CASE WHEN status='IN_PROGRESS' THEN 1 END) AS inProgress,
-            COUNT(CASE WHEN status='RESOLVED' THEN 1 END) AS resolved,
-            COUNT(*) AS total
-        FROM complaints`
+        WHERE c.id = ?
+        AND p.owner_id = ?
+        `,
+        [id, ownerId]
     );
 
-    return rows[0];
-};
+    if (complaint.length === 0) {
+        throw new Error("Complaint not found or unauthorized");
+    }
 
-const updateComplaintStatus = async (id, status) => {
     const [result] = await db.execute(
-        "UPDATE complaints SET status=? WHERE id=?",
+        `
+        UPDATE complaints
+        SET status = ?
+        WHERE id = ?
+        `,
         [status, id]
     );
 

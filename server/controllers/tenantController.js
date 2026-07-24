@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const db = require("../config/db");
 const tenantModel = require("../models/tenantModel");
 
+
 const createTenant = async (req, res) => {
     try {
         const {
@@ -18,10 +19,17 @@ const createTenant = async (req, res) => {
 
         // Check room capacity
 const [room] = await db.execute(
-    `SELECT capacity, occupied
-     FROM rooms
-     WHERE id = ?`,
-    [room_id]
+    `
+    SELECT
+        r.capacity,
+        r.occupied
+    FROM rooms r
+    JOIN properties p
+        ON r.property_id = p.id
+    WHERE r.id = ?
+    AND p.owner_id = ?
+    `,
+    [room_id, req.user.id]
 );
 
 if (room.length === 0) {
@@ -98,7 +106,8 @@ if (room[0].occupied >= room[0].capacity) {
 
 const getTenants = async (req, res) => {
     try {
-        const tenants = await tenantModel.getAllTenants();
+        const ownerId = req.user.id;
+        const tenants = await tenantModel.getAllTenants(ownerId);
 
         res.json({
             success: true,

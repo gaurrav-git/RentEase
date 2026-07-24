@@ -20,28 +20,35 @@ const createTenant = async (userId, tenantData) => {
     return result;
 };
 
-const getAllTenants = async () => {
-    const [rows] = await db.execute(`
-        SELECT
-            t.id,
-            t.user_id,
-            t.room_id,
-            u.name,
-            u.email,
-            t.phone,
-            t.aadhaar,
-            t.occupation,
-            t.joining_date,
-            t.security_deposit,
-            t.status,
-            r.room_number,
-            p.name AS property_name
-        FROM tenants t
-        JOIN users u ON t.user_id = u.id
-        JOIN rooms r ON t.room_id = r.id
-        JOIN properties p ON r.property_id = p.id
-        ORDER BY t.created_at DESC
-    `);
+const getAllTenants = async (ownerId) => {
+    const [rows] = await db.execute(
+    `
+    SELECT
+        t.id,
+        t.user_id,
+        t.room_id,
+        u.name,
+        u.email,
+        t.phone,
+        t.aadhaar,
+        t.occupation,
+        t.joining_date,
+        t.security_deposit,
+        t.status,
+        r.room_number,
+        p.name AS property_name
+    FROM tenants t
+    JOIN users u
+        ON t.user_id = u.id
+    JOIN rooms r
+        ON t.room_id = r.id
+    JOIN properties p
+        ON r.property_id = p.id
+    WHERE p.owner_id = ?
+    ORDER BY t.created_at DESC
+    `,
+    [ownerId]
+);
 
     return rows;
 };
