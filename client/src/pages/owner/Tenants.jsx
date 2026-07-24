@@ -299,7 +299,7 @@ const handleDelete = async (id) => {
         {/* Table */}
         <div className="overflow-x-auto bg-white dark:bg-gray-900 rounded-xl shadow">
           <table className="min-w-full">
-            <thead className="bg-slate-800 text-white">
+            <thead className="dark:bg-slate-800 dark:text-white">
   <tr>
     <th className="w-32 px-6 py-4 text-left">Tenant</th>
     <th className="w-56 px-28 py-4 text-left">Property</th>

@@ -52,10 +52,6 @@ const currentPage =
   <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
     {currentPage}
   </h1>
-
-  <p className="text-sm capitalize text-slate-500 dark:text-slate-400">
-    {user?.role}
-  </p>
 </div>
 
       <div className="flex items-center gap-6">
@@ -94,10 +90,6 @@ const currentPage =
             <h4 className="font-semibold test-slate-900 dark:text-white">
               {user?.name || "Owner"}
             </h4>
-
-            <p className="text-sm text-slate-500 dark:text-slate-400">
-                {user?.role === "OWNER" ? "Owner" : "Tenant"}
-            </p>
           </div>
         </div>
 

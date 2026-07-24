@@ -17,11 +17,43 @@ const createComplaint = async (complaintData) => {
 };
 
 const getComplaints = async () => {
-    const [rows] = await db.execute(
-        "SELECT * FROM complaints ORDER BY created_at DESC"
-    );
+    const [rows] = await db.execute(`
+        SELECT
+            c.id,
+            c.title,
+            c.description,
+            c.priority,
+            c.status,
+            c.created_at,
+            u.name AS tenant_name,
+            r.room_number,
+            p.name AS property_name
+        FROM complaints c
+        JOIN tenants t
+            ON c.tenant_id = t.user_id
+        JOIN users u
+            ON t.user_id = u.id
+        JOIN rooms r
+            ON c.room_id = r.id
+        JOIN properties p
+            ON r.property_id = p.id
+        ORDER BY c.created_at DESC
+    `);
 
     return rows;
+};
+
+const getComplaintStats = async () => {
+    const [rows] = await db.execute(
+        `SELECT
+            COUNT(CASE WHEN status='OPEN' THEN 1 END) AS open,
+            COUNT(CASE WHEN status='IN_PROGRESS' THEN 1 END) AS inProgress,
+            COUNT(CASE WHEN status='RESOLVED' THEN 1 END) AS resolved,
+            COUNT(*) AS total
+        FROM complaints`
+    );
+
+    return rows[0];
 };
 
 const updateComplaintStatus = async (id, status) => {
@@ -78,6 +110,7 @@ const getTenantComplaintStats = async (userId) => {
 module.exports = {
     createComplaint,
     getComplaints,
+    getComplaintStats,
     updateComplaintStatus,
     getComplaintsByTenant,
     getTenantComplaintStats,

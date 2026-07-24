@@ -39,19 +39,22 @@ const createComplaint = async (req, res) => {
 const getComplaints = async (req, res) => {
 
     const complaints = await complaintModel.getComplaints();
-
+    const stats = await complaintModel.getComplaintStats();
     res.json({
         success: true,
         data: complaints,
+        stats,
     });
 
 };
 
 const updateComplaintStatus = async (req, res) => {
+    const { id } = req.params;
+    const { status } = req.body;
 
     const result = await complaintModel.updateComplaintStatus(
-        req.params.id,
-        req.body.status
+        id,
+        status
     );
 
     if (result.affectedRows === 0) {
@@ -63,7 +66,7 @@ const updateComplaintStatus = async (req, res) => {
 
     res.json({
         success: true,
-        message: "Complaint updated",
+        message: "Complaint updated successfully",
     });
 
 };

@@ -101,14 +101,22 @@ const stats = dashboard.summary;
 
   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-    <div className="rounded-2xl border border-slate-700 bg-slate-900 p-6 h-[380px] flex flex-col">
+    <div className="rounded-2xl
+border
+border-slate-200 dark:border-slate-700
+bg-white dark:bg-slate-900
+p-6
+h-[380px]
+flex flex-col
+shadow-sm
+">
       <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
         Payments
       </h2>
       <hr className="border-slate-700 mb-3"/>
         <div className="border-b border-slate-700 pb-4 mb-4">
     <div className="flex justify-between items-center">
-        <span className="text-slate-400">
+        <span className="dark:text-slate-400">
             Total Revenue
         </span>
 
@@ -118,7 +126,7 @@ const stats = dashboard.summary;
     </div>
 </div>
 <div className="border-b border-slate-700 py-3">
-      <h3 className="text-sm font-semibold text-slate-400">
+      <h3 className="text-sm font-semibold dark:text-slate-400">
           Pending Payments ({dashboard.pendingPayments.length})
       </h3>
 </div>
@@ -139,11 +147,11 @@ const stats = dashboard.summary;
                 className="flex items-center justify-between py-4 border-b border-slate-700 last:border-none"
             >
                 <div>
-                    <p className="font-semibold text-white">
+                    <p className="font-semibold dark:text-white">
                         {payment.tenant_name}
                     </p>
 
-                    <p className="text-sm text-slate-400">
+                    <p className="text-sm dark:text-slate-400">
                         {payment.property_name} • {payment.room_number}
                     </p>
                 </div>
@@ -160,7 +168,15 @@ const stats = dashboard.summary;
 </div>
     </div>
 
-    <div className="rounded-2xl border border-slate-700 bg-slate-900 p-6 h-[380px] flex flex-col">
+    <div className="rounded-2xl
+border
+border-slate-200 dark:border-slate-700
+bg-white dark:bg-slate-900
+p-6
+h-[380px]
+flex flex-col
+shadow-sm
+">
       <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
         Recent Complaints
       </h2>
