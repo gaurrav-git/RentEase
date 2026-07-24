@@ -135,15 +135,15 @@ const [loading, setLoading] = useState(true);
 
                             <tr>
 
-                                <th className="p-4 text-left">Property</th>
+                                <th className="p-4 text-left  dark:text-white">Property</th>
 
-                                <th className="p-4 text-left">Room</th>
+                                <th className="p-4 text-left dark:text-white">Room</th>
 
-                                <th className="p-4 text-left">Amount</th>
+                                <th className="p-4 text-left dark:text-white">Amount</th>
 
-                                <th className="p-4 text-left">Date</th>
+                                <th className="p-4 text-left dark:text-white">Date</th>
 
-                                <th className="p-4 text-left">Status</th>
+                                <th className="p-4 text-left dark:text-white">Status</th>
 
                             </tr>
 
@@ -158,19 +158,19 @@ const [loading, setLoading] = useState(true);
                                     className="border-b dark:border-slate-700"
                                 >
 
-                                    <td className="p-4">
+                                    <td className="p-4 dark:text-white">
                                         {payment.property_name}
                                     </td>
 
-                                    <td className="p-4">
+                                    <td className="p-4 dark:text-white">
                                         {payment.room_number}
                                     </td>
 
-                                    <td className="p-4">
+                                    <td className="p-4 dark:text-white">
                                         ₹ {payment.amount}
                                     </td>
 
-                                    <td className="p-4">
+                                    <td className="p-4 dark:text-white">
                                         {new Date(
                                             payment.payment_date
                                         ).toLocaleDateString()}

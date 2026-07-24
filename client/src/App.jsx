@@ -6,6 +6,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Properties from "./pages/owner/Properties";
 import Rooms from "./pages/owner/Rooms";
 import Tenants from "./pages/owner/Tenants";
+import OwnerPayments from "./pages/owner/payments";
 
 import TenantDashboard from "./pages/tenant/Dashboard";
 import Profile from "./pages/tenant/Profile";
@@ -53,6 +54,14 @@ function App() {
       </ProtectedRoute>
     }
   />
+
+    <Route 
+  path="/owner/payments" 
+  element={
+    <ProtectedRoute>
+      <OwnerPayments />
+    </ProtectedRoute>
+  } />
 
 <Route path="/tenant/dashboard" element={<TenantDashboard />} />
 <Route path="/tenant/profile" element={<Profile />} />

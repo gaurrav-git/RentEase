@@ -28,4 +28,18 @@ router.get(
     paymentController.getMyPayments
 );
 
+router.delete(
+    "/:id",
+    authenticate,
+    authorize("OWNER"),
+    paymentController.deletePayment
+);
+
+router.put(
+    "/:id",
+    authenticate,
+    authorize("OWNER"),
+    paymentController.updatePayment
+);
+
 module.exports = router;

@@ -1,7 +1,8 @@
 import api from "./api";
 
-export const getTenants = () => {
-    return api.get("/tenants");
+export const getTenants = async () => {
+    const response = await api.get("/tenants");
+    return response.data;
 };
 
 export const getTenantDashboard = () => {
@@ -19,3 +20,4 @@ export const updateTenant = (id, tenantData) => {
 export const deleteTenant = (id) => {
     return api.delete(`/tenants/${id}`);
 };
+

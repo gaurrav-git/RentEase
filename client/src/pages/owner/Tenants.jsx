@@ -45,10 +45,11 @@ const [formData, setFormData] = useState({
     setLoading(true);
 
     const response = await getTenants();
-
-    setTenants(response.data.data);
+        console.log("API Response:", response);
+    setTenants(response.data);
   } catch (error) {
     console.error("Failed to fetch tenants:", error);
+    setTenants([]);
   } finally {
     setLoading(false);
   }

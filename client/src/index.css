@@ -13,4 +13,22 @@ body,
 body {
   font-family: system-ui, sans-serif;
   @apply bg-slate-100 dark:bg-slate-950 transition-colors;
+
+  /* Dark Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
 }

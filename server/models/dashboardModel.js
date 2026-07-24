@@ -36,16 +36,22 @@ const getDashboardStats = async () => {
     "SELECT COUNT(*) AS openComplaints FROM complaints WHERE status='OPEN'"
     );
 
-    const [recentPayments] = await db.execute(`
+    const [pendingPayments] = await db.execute(`
     SELECT
-        rp.id,
-        u.name AS tenantName,
-        rp.amount,
-        rp.payment_date
+    u.name AS tenant_name,
+    p.name AS property_name,
+    r.room_number,
+    rp.amount,
+    rp.payment_date,
+    rp.status
     FROM rent_payments rp
-    JOIN users u ON rp.tenant_id = u.id
-    ORDER BY rp.payment_date DESC
-    LIMIT 5
+    JOIN tenants t ON rp.tenant_id = t.user_id
+    JOIN users u ON t.user_id = u.id
+    JOIN rooms r ON rp.room_id = r.id
+    JOIN properties p ON r.property_id = p.id
+    WHERE rp.status = 'PENDING'
+    ORDER BY rp.payment_date ASC
+    LIMIT 10;
     `);
 
     const [recentComplaints] = await db.execute(`
@@ -62,6 +68,12 @@ const getDashboardStats = async () => {
     LIMIT 5
     `);
 
+    const [revenue] = await db.execute(`
+    SELECT COALESCE(SUM(amount), 0) AS totalRevenue
+    FROM rent_payments
+    WHERE status = 'PAID'
+`);
+
     return {
     summary: {
         ...property,
@@ -72,7 +84,8 @@ const getDashboardStats = async () => {
         ...payment,
         ...complaint,
     },
-    recentPayments,
+    totalRevenue : revenue[0].totalRevenue,
+    pendingPayments,
     recentComplaints,
 };
 };

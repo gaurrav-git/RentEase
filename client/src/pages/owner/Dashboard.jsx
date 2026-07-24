@@ -16,7 +16,8 @@ import { getDashboardStats } from "../../services/dashboardService";
 function Dashboard() {
   const [dashboard, setDashboard] = useState({
   summary: {},
-  recentPayments: [],
+  totalRevenue: 0,
+  pendingPayments: [],
   recentComplaints: [],
 });
 
@@ -100,40 +101,79 @@ const stats = dashboard.summary;
 
   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-    <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 shadow-sm transition-colors">
-      <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
-        Recent Payments
+    <div className="rounded-2xl border border-slate-700 bg-slate-900 p-6 h-[380px] flex flex-col">
+      <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+        Payments
       </h2>
+      <hr className="border-slate-700 mb-3"/>
+        <div className="border-b border-slate-700 pb-4 mb-4">
+    <div className="flex justify-between items-center">
+        <span className="text-slate-400">
+            Total Revenue
+        </span>
 
-      <div className="mt-10 text-center text-slate-400 dark:text-slate-500">
-        <div className="mt-4 space-y-3">
-  {dashboard.recentPayments.map((payment) => (
-    <div
-      key={payment.id}
-      className="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-2 last:border-none"
-    >
-      <div>
-        <p className="font-medium text-slate-900 dark:text-white">{payment.tenantName}</p>
-        <p className="text-sm text-slate-500 dark:text-slate-400">
-          {new Date(payment.payment_date).toLocaleDateString()}
-        </p>
-      </div>
-
-      <p className="font-semibold text-slate-900 dark:text-white">₹{payment.amount}</p>
+        <span className="text-2xl font-bold text-green-400">
+            ₹{dashboard.totalRevenue?.toLocaleString() || 0}
+        </span>
     </div>
-  ))}
 </div>
-      </div>
+<div className="border-b border-slate-700 py-3">
+      <h3 className="text-sm font-semibold text-slate-400">
+          Pending Payments ({dashboard.pendingPayments.length})
+      </h3>
+</div>
+    <div className="flex-1 overflow-y-auto mt-4 pr-2 space-y-3">
+
+    {dashboard.pendingPayments.length === 0 ? (
+
+        <div className="h-full flex items-center justify-center text-slate-400">
+            🎉 No pending payments
+        </div>
+
+    ) : (
+
+        dashboard.pendingPayments.map((payment) => (
+
+            <div
+                key={payment.id}
+                className="flex items-center justify-between py-4 border-b border-slate-700 last:border-none"
+            >
+                <div>
+                    <p className="font-semibold text-white">
+                        {payment.tenant_name}
+                    </p>
+
+                    <p className="text-sm text-slate-400">
+                        {payment.property_name} • {payment.room_number}
+                    </p>
+                </div>
+
+                <p className="font-semibold text-red-400">
+                    ₹{Number(payment.amount).toLocaleString()}
+                </p>
+            </div>
+
+        ))
+
+    )}
+
+</div>
     </div>
 
-    <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 shadow-sm transition-colors">
+    <div className="rounded-2xl border border-slate-700 bg-slate-900 p-6 h-[380px] flex flex-col">
       <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
         Recent Complaints
       </h2>
+      <hr className="border-slate-700 my-3"/>
+      <div className="flex-1 overflow-y-auto pr-2 space-y-3">
+         {dashboard.recentComplaints.length === 0 ? (
 
-      <div className="mt-10 text-center text-slate-400 dark:text-slate-500">
-        <div className="mt-4 space-y-3">
-  {dashboard.recentComplaints.map((complaint) => (
+            <div className="h-full flex items-center justify-center text-slate-400">
+                No complaints
+            </div>
+
+        ) : (
+  dashboard.recentComplaints.map((complaint) => (
     <div
       key={complaint.id}
       className="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3 last:border-none"
@@ -152,15 +192,14 @@ const stats = dashboard.summary;
         {complaint.status}
       </span>
     </div>
-  ))}
+      ))
+   )}
+   </div>
+   </div>
 </div>
-      </div>
-    </div>
-
-  </div>
-
 </div>
-    </DashboardLayout>
+
+</DashboardLayout>
   );
 }
 
