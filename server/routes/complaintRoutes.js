@@ -1,7 +1,6 @@
 const express = require("express");
 
 const router = express.Router();
-
 const authenticate = require("../middleware/authMiddleware");
 const authorize = require("../middleware/roleMiddleware");
 
@@ -26,6 +25,13 @@ router.put(
     authenticate,
     authorize("OWNER"),
     complaintController.updateComplaintStatus
+);
+
+router.get(
+    "/my-complaints",
+    authenticate,
+    authorize("TENANT"),
+    complaintController.getMyComplaints
 );
 
 module.exports = router;

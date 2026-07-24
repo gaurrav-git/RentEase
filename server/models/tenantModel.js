@@ -238,10 +238,20 @@ const deleteTenant = async (id) => {
     }
 };
 
+const getTenantByUserId = async (userId) => {
+    const [rows] = await db.execute(
+        "SELECT * FROM tenants WHERE user_id = ?",
+        [userId]
+    );
+
+    return rows[0];
+};
+
 module.exports = {
     createTenant,
     getAllTenants,
     updateTenant,
     deleteTenant,
     getTenantDashboard,
+    getTenantByUserId,
 };
