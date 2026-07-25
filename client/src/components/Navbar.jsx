@@ -71,15 +71,6 @@ const currentPage =
             )}
         </button>
 
-        <button className="relative">
-          <Bell size={22}
-          className="text-slate-700 dark:tet-white transition-colors" />
-
-          <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
-            2
-          </span>
-        </button>
-
         <div className="flex items-center gap-3">
           <UserCircle
             size={42}

@@ -52,12 +52,8 @@ function Dashboard() {
         {/* Welcome */}
         <div>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
-            Welcome back, {dashboard.name || "Tenant"} 👋
+            Welcome back, {dashboard.name || "Tenant"}
           </h1>
-
-          <p className="mt-2 text-slate-500 dark:text-slate-400">
-            Here's a quick overview of your accommodation.
-          </p>
         </div>
 
         {/* Cards */}
@@ -127,44 +123,7 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* Notices */}
-        <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-md p-6">
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-6">
-            Recent Notices
-          </h2>
-
-          <div className="space-y-4">
-            <div className="border-l-4 border-blue-600 pl-4">
-              <h3 className="font-semibold text-slate-900 dark:text-white">
-                Rent Reminder
-              </h3>
-              <p className="text-slate-500 dark:text-slate-400">
-                Please pay your rent before the 5th of every month.
-              </p>
-            </div>
-
-            <div className="border-l-4 border-yellow-500 pl-4">
-              <h3 className="font-semibold text-slate-900 dark:text-white">
-                Water Tank Cleaning
-              </h3>
-              <p className="text-slate-500 dark:text-slate-400">
-                Water supply will be unavailable from 10:00 AM to 12:00 PM on
-                Sunday due to maintenance.
-              </p>
-            </div>
-
-            <div className="border-l-4 border-green-600 pl-4">
-              <h3 className="font-semibold text-slate-900 dark:text-white">
-                Community Meeting
-              </h3>
-              <p className="text-slate-500 dark:text-slate-400">
-                Monthly residents' meeting will be held in the common hall this
-                Saturday at 6:00 PM.
-              </p>
-            </div>
-          </div>
         </div>
-      </div>
     </TenantLayout>
   );
 }

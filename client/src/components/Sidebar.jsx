@@ -65,16 +65,6 @@ const menu = [
     ],
   },
 
-  {
-    title: "ANALYTICS",
-    items: [
-      {
-        name: "Reports",
-        icon: BarChart3,
-        path: "/owner/reports",
-      },
-    ],
-  },
 ];
 
 function Sidebar() {
