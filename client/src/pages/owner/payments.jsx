@@ -68,16 +68,20 @@ const Payments = () => {
         .reduce((sum, p) => sum + Number(p.amount), 0);
 
     const pendingPayments = payments.filter(
-        (p) => p.status === "PENDING"
-    ).length;
+    (p) =>
+        p.status === "PENDING" &&
+        new Date(p.payment_date) >= new Date()
+).length;
 
     const paidPayments = payments.filter(
         (p) => p.status === "PAID"
     ).length;
 
     const overduePayments = payments.filter(
-        (p) => p.status === "OVERDUE"
-    ).length;
+    (p) =>
+        p.status === "PENDING" &&
+        new Date(p.payment_date) < new Date()
+).length;
 
     const handleSavePayment = async () => {
     try {
@@ -299,17 +303,20 @@ const handleDelete = async (id) => {
                                         <td className="px-6 py-4">
 
                                             <span
-                                                className={`px-3 py-1 rounded-full text-sm font-medium
-                                                ${
-                                                    payment.status === "PAID"
-                                                        ? "bg-green-100 text-green-700"
-                                                        : payment.status === "PENDING"
-                                                        ? "bg-yellow-100 text-yellow-700"
-                                                        : "bg-red-100 text-red-700"
-                                                }`}
-                                            >
-                                                {payment.status}
-                                            </span>
+                                            className={`px-3 py-1 rounded-full text-sm font-medium ${
+                                                payment.status === "PAID"
+                                                    ? "bg-green-100 text-green-700"
+                                                    : payment.status === "PENDING" &&
+                                                    new Date(payment.payment_date) < new Date()
+                                                    ? "bg-red-100 text-red-700"
+                                                    : "bg-yellow-100 text-yellow-700"
+                                            }`}
+                                        >
+                                            {payment.status === "PENDING" &&
+                                            new Date(payment.payment_date) < new Date()
+                                                ? "OVERDUE"
+                                                : payment.status}
+                                        </span>
 
                                         </td>
                             <td className="px-6 py-4">
@@ -440,8 +447,6 @@ className="w-full p-3 rounded-lg border border-slate-300 bg-white dark:bg-slate-
 
                 <option value="PAID">Paid</option>
                 <option value="PENDING">Pending</option>
-                <option value="OVERDUE">Overdue</option>
-
             </select>
 
         </div>
