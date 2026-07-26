@@ -70,7 +70,7 @@ const menu = [
 function Sidebar() {
   return (
     <aside className="
-        w-72
+        w-72 min-w-72 max-w-72 flex-shrink-0
         bg-white dark:bg-slate-900
         border-r border-slate-200 dark:border-slate-800
         text-slate-900 dark:text-white

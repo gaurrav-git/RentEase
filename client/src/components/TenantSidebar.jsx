@@ -42,14 +42,14 @@ const menu = [
 
 function Sidebar() {
   return (
-    <aside className="w-72 min-h-screen bg-slate-950 text-white flex flex-col">
+    <aside className="w-72 min-w-72 max-w-72 min-h-screen flex-shrink-0 bg-white dark:bg-slate-900 text-slate-900 dark:text-white flex flex-col transition-colors duration-300">
 
-      <div className="px-8 py-8 border-b border-slate-800">
+      <div className="px-8 py-8 border-b border-slate-200 dark:border-slate-800">
         <h1 className="text-3xl font-bold tracking-tight">
           RentEase
         </h1>
 
-        <p className="text-slate-400 text-sm mt-1">
+        <p className="text-slate-600 dark:text-slate-400 text-sm mt-1">
           Property Management
         </p>
       </div>
@@ -59,7 +59,7 @@ function Sidebar() {
         {menu.map((section) => (
           <div key={section.title} className="mb-8">
 
-            <p className="text-xs uppercase tracking-widest text-slate-500 mb-3 px-3">
+            <p className="text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-3 px-3">
               {section.title}
             </p>
 
@@ -76,7 +76,7 @@ function Sidebar() {
                       `flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
                         isActive
                           ? "bg-blue-600 text-white shadow-lg"
-                          : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                          : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
                       }`
                     }
                   >
