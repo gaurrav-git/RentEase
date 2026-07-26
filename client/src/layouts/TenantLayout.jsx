@@ -1,4 +1,4 @@
-import Sidebar from "../components/tenantSidebar";
+import Sidebar from "../components/TenantSidebar";
 import Navbar from "../components/Navbar";
 
 function TenantLayout({ children }) {
