@@ -68,7 +68,7 @@ CREATE TABLE complaints (
 );
 
 
---Notifications Table
+-- Notifications Table
 
 CREATE TABLE notifications (
     id INT PRIMARY KEY AUTO_INCREMENT,
